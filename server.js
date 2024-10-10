@@ -9,7 +9,9 @@ const compression = require('compression');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const winston = require('winston');
+
 dotenv.config()
+app.use(body_parser.json())
 
 // const rateLimiter = new RateLimiterMemory({
 //     points: 100,
@@ -27,9 +29,14 @@ dotenv.config()
 //         new winston.transports.File({ filename: 'combined.log' })
 //     ]
 // });
-app.use(cros({
-    origin: ["http://localhost:3000", "https://mubashermasr.vercel.app"]
-}))
+if(process.env.mode === 'production'){
+    app.use(cors())
+}else{
+    app.use(cors({
+        origin: ["http://localhost:3000", "https://mubashermasr.vercel.app"]
+    }))
+}
+
 // const allowedOrigins = ["http://localhost:3000", "https://mubashermasr.vercel.app", "https://mubashermasr.com"];
 // const corsOptions = {
 //     origin: (origin, callback) => {
@@ -40,7 +47,6 @@ app.use(cros({
 //         }
 //     }
 // };
-app.use(body_parser.json())
 // app.use(cors(corsOptions));
 // app.use(helmet());
 // app.use(compression());
